@@ -13,13 +13,17 @@ import { ShowCard, SearchForm, Header } from "../../components";
 const SearchPage = () => {
   const [showData, setShowData] = useState([]);
   const [searchString, setSearchString] = useState("Friends");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function searchAPI() {
+      setIsLoading(true);
       const result = await axios.get(
         `https://api.tvmaze.com/search/shows?q=${searchString}`
       );
       setShowData(result.data);
+      // console.log("showData ==>", showData);
+      setIsLoading(false);
     }
 
     searchAPI();
@@ -33,9 +37,7 @@ const SearchPage = () => {
     <>
       <Header />
       <SearchForm handleSearchSubmission={handleSearch} />
-      {showData.map((s) => (
-        <ShowCard key={s["show"]["id"]} data={s["show"]} />
-      ))}
+      {isLoading ? <em>Loading...</em> : showData.map((s) => <ShowCard key={s["show"]["id"]} data={s["show"]} />)}
     </>
   );
 };
