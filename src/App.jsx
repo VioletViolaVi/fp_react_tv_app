@@ -28,7 +28,7 @@ const App = () => {
   }, [searchStr]);
 
   function handleSearch(userInput) {
-    // console.log("I am a function passed a prop that calls my original parent");
+    // console.log("I am a function passed as a prop that calls my original parent");
     // console.log(searchStr);
     setSearchStr(userInput);
   }
