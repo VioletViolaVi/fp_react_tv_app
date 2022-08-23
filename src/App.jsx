@@ -6,10 +6,38 @@ NOTES:
 */
 
 import React, { useState, useEffect } from "react";
-import ShowCard from "./components/ShowCard";
 import axios from "axios";
 
 import "./App.css";
+// for better structuring
+import { ShowCard, SearchForm } from "./components";
+
+const App = () => {
+  const [showData, setShowData] = useState([]);
+  console.log(showData);
+
+  useEffect(() => {
+    async function searchApi() {
+      const result = await axios.get(
+        "https://api.tvmaze.com/search/shows?q=girls"
+      );
+      setShowData(result.data);
+    }
+    searchApi();
+  }, []);
+
+  return (
+    <>
+      <SearchForm />
+
+      {showData.map((singleObj) => {
+        return <ShowCard key={singleObj.show.id} data={singleObj.show} />;
+      })}
+    </>
+  );
+};
+
+export default App;
 
 // const data = [
 //   {
@@ -34,34 +62,3 @@ import "./App.css";
 //     rating: 8.4
 //   }
 // ];
-
-const App = () => {
-  const [showData, setShowData] = useState([]);
-  console.log(showData);
-
-  useEffect(() => {
-    async function searchApi() {
-      const result = await axios.get(
-        "https://api.tvmaze.com/search/shows?q=girls"
-      );
-      setShowData(result.data);
-    }
-    searchApi();
-  }, []);
-
-  return (
-    <>
-        <form action="" id="searchForm"></form>
-      {showData.map((singleObj) => {
-        return (
-          <ShowCard
-            key={singleObj.show.id}
-            data={singleObj.show}
-          />
-        );
-      })}
-    </>
-  );
-};
-
-export default App;
