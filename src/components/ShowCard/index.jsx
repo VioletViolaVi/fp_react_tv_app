@@ -34,12 +34,15 @@ const ShowCard = ({ data }) => {
   console.log(data);
   return (
     <div className="show_card">
-      <img
+      {/* <img
         src={data["image"] ? data["image"]["medium"] : ""}
         alt="Image of tv show."
-      />
+      /> */}
+      {data.image && (
+        <img src={data["image"]["medium"]} alt="Image of tv show." />
+      )}
       <h2>{data.name}</h2>
-      <p>{data.summary}</p>
+      <p role="paragraph">{data.summary}</p>
     </div>
   );
 };
