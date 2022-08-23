@@ -9,26 +9,33 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import "./App.css";
-// for better structuring
+// for better structuring (below)
 import { ShowCard, SearchForm } from "./components";
 
 const App = () => {
   const [showData, setShowData] = useState([]);
-  console.log(showData);
+  const [searchStr, setSearchStr] = useState("Friends");
+  //   console.log(showData);
 
   useEffect(() => {
     async function searchApi() {
       const result = await axios.get(
-        "https://api.tvmaze.com/search/shows?q=girls"
+        `https://api.tvmaze.com/search/shows?q=${searchStr}`
       );
       setShowData(result.data);
     }
     searchApi();
-  }, []);
+  }, [searchStr]);
+
+  function handleSearch(userInput) {
+    // console.log("I am a function passed a prop that calls my original parent");
+    // console.log(searchStr);
+    setSearchStr(userInput);
+  }
 
   return (
     <>
-      <SearchForm />
+      <SearchForm handleSearchSubmission={handleSearch} />
 
       {showData.map((singleObj) => {
         return <ShowCard key={singleObj.show.id} data={singleObj.show} />;
