@@ -1,36 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-import { ShowCard, SearchForm, Header } from '../../components';
+import { loadShowsAction, setLoadingAction } from "../../actions";
+import { ShowCard, SearchForm, Header } from "../../components";
 
 const SearchPage = () => {
+  const dispatch = useDispatch();
 
-    const [showData, setShowData] = useState([]);
-    const [searchString, setSearchString] = useState("Friends");
-    const [isLoading, setIsLoading] = useState(true);
+  const showData = useSelector((state) => state.showData);
+  const [searchString, setSearchString] = useState("Friends");
+  const isLoading = useSelector((state) => state.loading);
+  const error = useSelector((state) => state.error);
 
-    useEffect(() => {
+  useEffect(() => {
+    // dispatch(setLoadingAction(true));
+    dispatch(loadShowsAction(searchString));
+  }, [searchString]);
 
-        async function searchAPI() {
-            setIsLoading(true);
-            const result = await axios.get(`https://api.tvmaze.com/search/shows?q=${searchString}`);
-            setShowData(result.data);
-            setIsLoading(false);
-        }
+  function handleSearch(userInput) {
+    setSearchString(userInput);
+  }
 
-        searchAPI();
-
-    }, [searchString]);
-
-    function handleSearch(userInput){
-        setSearchString(userInput);
-    }
-
-    return <>
-            <Header />
-            <SearchForm handleSearchSubmission={handleSearch}/>
-            {isLoading ? <em>Loading...</em> : showData.map((s) => <ShowCard key={s["show"]["id"]} data={s["show"]} />)}
-            </>
-}
+  return (
+    <>
+      <Header />
+      <SearchForm handleSearchSubmission={handleSearch} />
+      {error ? <em>Something went wrong...</em> : false}
+      {isLoading ? (
+        <em>Loading...</em>
+      ) : (
+        showData.map((s) => <ShowCard key={s["show"]["id"]} data={s["show"]} />)
+      )}
+    </>
+  );
+};
 
 export default SearchPage;
