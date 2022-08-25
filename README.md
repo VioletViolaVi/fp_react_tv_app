@@ -1,1 +1,3 @@
-# react-tv-app
+# React tv app
+
+# Redux
