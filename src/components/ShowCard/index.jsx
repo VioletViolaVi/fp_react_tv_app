@@ -31,7 +31,7 @@ NOTES:
 import React from "react";
 
 const ShowCard = ({ data }) => {
-  console.log(data);
+  // console.log(data);
   return (
     <div className="show_card">
       {/* <img
